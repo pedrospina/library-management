@@ -37,4 +37,8 @@ public class LoanService {
                 + isbn + " para el usuario: " + id);
     }
 
+    public List<Loan> getLoans() {
+        return loans;
+    }
+
 }

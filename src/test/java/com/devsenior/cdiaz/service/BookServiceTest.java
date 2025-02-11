@@ -70,12 +70,37 @@ public class BookServiceTest {
     }
 
     @Test
-    void testGetAllBooks() {
+    void testDeleteWithExistingBooksButNotGivenIsbn() {
+        // GIVEN
+        service.addBook("9876543210", "En busca de la felicidad", "Cesar Diaz");
+        var isbn = "1234567890";
 
+        // WHEN - THEN
+        assertThrows(NotFoundException.class,
+                () -> service.deleteBook(isbn));
     }
 
     @Test
-    void testGetBookByIsbn() {
+    void testGetAllBooks() {
+        // GIVEN
 
+        // WHEN
+        var books = service.getAllBooks();
+
+        // THEN
+        assertNotNull(books);
+        assertEquals(0, books.size());
+    }
+
+    @Test
+    void testGetBookByIsbnWithWrongIsbn() {
+        // GIVEN
+        service.addBook("1234567890", "Buscando la felicidad", "Cesar Diaz");
+
+        var isbn = "0987654321";
+
+        // WHEN -THEN
+        assertThrows(NotFoundException.class,
+                () -> service.getBookByIsbn(isbn));
     }
 }

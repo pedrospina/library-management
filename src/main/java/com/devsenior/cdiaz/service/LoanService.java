@@ -21,6 +21,14 @@ public class LoanService {
     public void addLoan(String id, String isbn) throws NotFoundException {
         var user = userService.getUserById(id);
         var book = bookService.getBookByIsbn(isbn);
+
+        for (var loan : loans) {
+            if (loan.getBook().getIsbn().equals(isbn)
+                    && loan.getState().equals(LoanState.STARTED)) {
+                throw new NotFoundException("El libro con el isbn: "+isbn+" se encuentra prestado");
+            }
+        }
+
         loans.add(new Loan(user, book));
     }
 
@@ -28,7 +36,7 @@ public class LoanService {
         for (var loan : loans) {
             if (loan.getUser().getId().equals(id)
                     && loan.getBook().getIsbn().equals(isbn)
-                    && loan.getLoanDate().equals(LoanState.STARTED)) {
+                    && loan.getState().equals(LoanState.STARTED)) {
                 loan.setState(LoanState.FINISHED);
                 return;
             }

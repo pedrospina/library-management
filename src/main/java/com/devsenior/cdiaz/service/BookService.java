@@ -2,18 +2,20 @@ package com.devsenior.cdiaz.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import com.devsenior.cdiaz.exception.NotFoundException;
 import com.devsenior.cdiaz.model.Book;
 
 public class BookService {
-    private List<Book> books;
+    private static List<Book> books;
+    private static BookService instance;
 
     public BookService() {
         books = new ArrayList<>();
     }
 
-    public void addBook(String isbn, String title, String author) {
+    public static void addBook(String isbn, String title, String author) {
         books.add(new Book(isbn, title, author));
     }
 
@@ -39,5 +41,13 @@ public class BookService {
         }
         throw new NotFoundException("No se puede eliminar el libro con isbn: "+isbn);
     }
+
+    public static BookService getInstancia() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getInstancia'");
+    }
+
+
+  
 
 }

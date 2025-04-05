@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.time.LocalDate;
+
 
 class Libro {
     private int id;
@@ -30,7 +32,7 @@ class Libro {
 
     @Override
     public String toString() {
-        return "Libro [ID=" + id + ", Título=" + titulo + ", Autor=" + autor + "]";
+        return "Libro [ID= " + id + ", Título= " + titulo + ", Autor= " + autor + "]";
     }
 }
 
@@ -54,8 +56,8 @@ class Usuario {
 
 class Prestamo {
     private Libro libro;
-    private Usuario usuario;
-    private Date fechaPrestamo;
+    Usuario usuario;
+    Date fechaPrestamo;
 
     public Prestamo(Libro libro, Usuario usuario) {
         this.libro = libro;
@@ -65,7 +67,7 @@ class Prestamo {
 
     @Override
     public String toString() {
-        return "Préstamo [Libro=" + libro.getTitulo() + ", Usuario=" + usuario.getNombre() + ", Fecha=" + fechaPrestamo + "]";
+        return "Préstamo [Libro= " + libro.getTitulo() + ", Usuario= " + usuario.getNombre() + ", Fecha= " + fechaPrestamo + "]";
     }
 }
 
@@ -78,8 +80,10 @@ public class Biblioteca {
         libros = new ArrayList<>();
         usuarios = new ArrayList<>();
         prestamos = new ArrayList<>();
+
     }
 
+    
     public void agregarLibro(int id, String titulo, String autor) {
         libros.add(new Libro(id, titulo, autor));
         System.out.println("Libro agregado: " + titulo);
@@ -99,14 +103,15 @@ public class Biblioteca {
         System.out.println("Usuario creado: " + nombre);
     }
 
-    public void prestarLibro(int libroId, int usuarioId) {
+    public void prestarLibro(int libroId, int usuarioId, Date fechaPrestamo) {
         Libro libro = obtenerLibroPorId(libroId);
         Usuario usuario = obtenerUsuarioPorId(usuarioId);
         if (libro != null && usuario != null) {
             prestamos.add(new Prestamo(libro, usuario));
-            System.out.println("Préstamo registrado: " + libro.getTitulo() + " a " + usuario.getNombre());
+            System.out.println("Préstamo registrado:  Libeo: " + libro.getTitulo() + " Usuario: " + usuario.getNombre() + " fecha de prestamo: " + fechaPrestamo.toString()); 
         } else {
             System.out.println("Libro o usuario no encontrado.");
+            return;
         }
     }
 
@@ -130,7 +135,12 @@ public class Biblioteca {
         return prestamosUsuario;
     }
 
+
+
     public static void main(String[] args) {
+
+
+  
         Biblioteca biblioteca = new Biblioteca();
         Scanner scanner = new Scanner(System.in);
         int opcion;
@@ -149,6 +159,8 @@ public class Biblioteca {
             switch (opcion) {
                 case 1:
                     System.out.print("Ingrese ID del libro: ");
+
+            if (scanner.hasNextInt()) {
                     int idLibro = scanner.nextInt();
                     scanner.nextLine(); // Limpiar el buffer
                     System.out.print("Ingrese título del libro: ");
@@ -158,8 +170,15 @@ public class Biblioteca {
                     biblioteca.agregarLibro(idLibro, titulo, autor);
                     break;
     
+            }else{
+                    System.out.println("Error: Debes ingresar un número válido.");
+                    Biblioteca.main(null);
+            }                      
+    
                 case 2:
+
                     System.out.print("Ingrese ID del libro: ");
+                    if (scanner.hasNextInt()) {
                     int idLibroBuscar = scanner.nextInt();
                     Libro libroEncontrado = biblioteca.obtenerLibroPorId(idLibroBuscar);
                     if (libroEncontrado != null) {
@@ -169,8 +188,16 @@ public class Biblioteca {
                     }
                     break;
     
+                    }else{
+                    System.out.println("Error: Debes ingresar un número válido.");
+                    Biblioteca.main(null);
+                    }                      
+
+                    
                 case 3:
                     System.out.print("Ingrese ID del usuario: ");
+                    
+                    if (scanner.hasNextInt()) {
                     int idUsuario = scanner.nextInt();
                     scanner.nextLine(); // Limpiar el buffer
                     System.out.print("Ingrese nombre del usuario: ");
@@ -178,15 +205,25 @@ public class Biblioteca {
                     biblioteca.crearUsuario(idUsuario, nombreUsuario);
                     break;
     
+                    }else{
+                    System.out.println("Error: Debes ingresar un número válido.");
+                    Biblioteca.main(null);
+                    }
                 case 4:
                     System.out.print("Ingrese ID del libro a prestar: ");
+
+               
                     int libroId = scanner.nextInt();
+                    
                     System.out.print("Ingrese ID del usuario: ");
                     int usuarioId = scanner.nextInt();
-                    biblioteca.prestarLibro(libroId, usuarioId);
+                    biblioteca.prestarLibro(libroId, usuarioId, new Date());    
                     break;
     
+              
+
                 case 5:
+    
                     System.out.print("Ingrese ID del usuario: ");
                     int idUsuarioPrestamos = scanner.nextInt();
                     List<Prestamo> prestamosUsuario = biblioteca.obtenerPrestamosPorUsuario(idUsuarioPrestamos);
@@ -200,6 +237,8 @@ public class Biblioteca {
                     }
                     break;
     
+                
+
                 case 0:
                     System.out.println("Saliendo del programa...");
                     break;
@@ -211,6 +250,30 @@ public class Biblioteca {
         } while (opcion != 0);
     
         scanner.close();
+    }
+
+    public List<Libro> getLibros() {
+        return libros;
+    }
+
+    public void setLibros(List<Libro> libros) {
+        this.libros = libros;
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
+
+    public List<Prestamo> getPrestamos() {
+        return prestamos;
+    }
+
+    public void setPrestamos(List<Prestamo> prestamos) {
+        this.prestamos = prestamos;
     }
 
 
